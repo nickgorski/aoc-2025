@@ -9,26 +9,31 @@ class Dial:
 
     def Turn(self, r):
         """Turn the dial left or right a set distance, e.g. L7."""
+        start = self.p
+
         direction, distance = r[0], int(r[1:])
+        full, partial = distance // 100, distance % 100
+
+        self.zeroes += full
 
         if direction == 'L':
-            while distance > 0:
-                distance -= 1
-                self.p -= 1
-                if self.p < 0:
-                    self.p += 100
-                if self.p == 0:
+            self.p -= partial
+            if self.p < 0:
+                self.p = self.p % 100
+                if start != 0:
                     self.zeroes += 1
         elif direction == 'R':
-            while distance > 0:
-                distance -= 1
-                self.p += 1
-                if self.p >= 100:
-                    self.p -= 100
-                if self.p == 0:
-                    self.zeroes += 1
+            self.p += partial
+            if self.p > 100:
+                self.p = self.p % 100
+                self.zeroes += 1
+            elif self.p == 100:
+                self.p = self.p % 100
         else:
             raise Exception('Invalid rotation: %s' % r)
+
+        if self.p == 0:
+            self.zeroes += 1
         self.counts[self.p] += 1
 
 
