@@ -26,12 +26,26 @@ class Model:
     def GetCell(self, j, i):
         return self.m[j][i]
 
+    def GetAccessible(self):
+        accessible = []
+        for j in range(m.height):
+            for i in range(m.width):
+                if m.GetCell(j, i) == '@' and m.GetAllAdjacents(j, i).count('@') < 4:
+                    accessible.append((j, i))
+        return accessible
+
+    def Remove(self, positions):
+        for c in positions:
+            j, i = c
+            self.m[j][i] = '.'
+
 
 if __name__ == '__main__':
     m = Model(sys.argv[1])
+    accessible = m.GetAccessible()
     count = 0
-    for j in range(m.height):
-        for i in range(m.width):
-            if m.GetCell(j, i) == '@' and m.GetAllAdjacents(j, i).count('@') < 4:
-                count += 1
+    while len(accessible) > 0:
+        count += len(accessible)
+        m.Remove(accessible)
+        accessible = m.GetAccessible()
     print(count)
