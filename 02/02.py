@@ -5,12 +5,14 @@ def IsInvalid(n):
     n = str(n)
     num_digits = len(n)
 
-    # Must have an even number of digits.
-    if num_digits % 2 != 0:
-        return False
+    for i in range(1, (num_digits // 2) + 1):
+        if num_digits % i == 0:
+            p = n[:i]
+            mult = (num_digits - i) // i
+            if p * mult == n[i:]:
+                return True
 
-    # Return True if the first and second halves are equivalent.
-    return n[:num_digits // 2] == n[num_digits // 2:]
+    return False
 
 def FindInvalidProductsInRange(a, b):
     invalid_products = []
